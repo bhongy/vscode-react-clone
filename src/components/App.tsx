@@ -1,10 +1,19 @@
-import * as React from "react";
+import * as React from 'react';
+import { ipcRenderer } from 'electron';
 
-const App = () => (
-  <div>
-    <h1>Hello World from Renderer</h1>
-    {console.log(process)}
-  </div>
-);
+class App extends React.Component {
+  handleButtonClick = () => {
+    ipcRenderer.send('window:create');
+  };
+
+  render() {
+    return (
+      <div>
+        <h1>Hello World from Renderer</h1>
+        <button onClick={this.handleButtonClick}>Create New Window</button>
+      </div>
+    );
+  }
+}
 
 export default App;

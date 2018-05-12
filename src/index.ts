@@ -1,18 +1,24 @@
-import { app, BrowserWindow } from 'electron';
+import { app, ipcMain, BrowserWindow } from 'electron';
 
-let mainWindow: Electron.BrowserWindow | null = null;
+const windowsById: Map<number, Electron.BrowserWindow | null> = new Map();
 
 function createWindow() {
-  mainWindow = new BrowserWindow();
+  const win = new BrowserWindow();
+  const { id } = win;
+
+  windowsById.set(id, win);
 
   const entryPageUrl = `file://${__dirname}/../index.html`;
-  mainWindow.loadURL(entryPageUrl);
-  mainWindow.on('closed', () => {
-    mainWindow = null;
+  win.loadURL(entryPageUrl);
+  win.on('closed', () => {
+    windowsById.delete(id);
   });
 }
 
-app.on('ready', createWindow);
+app.on('ready', () => {
+  createWindow();
+  ipcMain.on('window:create', createWindow);
+});
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
@@ -21,7 +27,7 @@ app.on('window-all-closed', () => {
 });
 
 app.on('activate', () => {
-  if (mainWindow == null) {
+  if (windowsById.size === 0) {
     createWindow();
   }
 });

@@ -8,9 +8,11 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "start": "electron index.js"
+    "build": "tsc",
+    "start": "yarn build && electron ./dist/index.js"
   },
   "devDependencies": {
-    "electron": "^2.0.0"
+    "electron": "^2.0.0",
+    "typescript": "^2.8.3"
   }
 }

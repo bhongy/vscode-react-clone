@@ -9,6 +9,7 @@
 		"moduleResolution": "node",
     "target": "es2015",
     "jsx": "react",
+    "sourceMap": true,
 		"noImplicitAny": true,
 		"strictNullChecks": true
 	},

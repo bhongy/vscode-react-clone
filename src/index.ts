@@ -5,7 +5,7 @@ let mainWindow: Electron.BrowserWindow | null = null;
 function createWindow() {
   mainWindow = new BrowserWindow();
 
-  const entryPageUrl = `file://${__dirname}/index.html`;
+  const entryPageUrl = `file://${__dirname}/../index.html`;
   mainWindow.loadURL(entryPageUrl);
   mainWindow.on('closed', () => {
     mainWindow = null;

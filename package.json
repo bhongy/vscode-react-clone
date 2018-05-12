@@ -9,7 +9,7 @@
   "private": true,
   "scripts": {
     "build": "tsc",
-    "start": "cp ./src/index.html ./dist && yarn build && electron ./dist/index.js"
+    "start": "yarn build && electron ./dist/index.js"
   },
   "devDependencies": {
     "electron": "^2.0.0",

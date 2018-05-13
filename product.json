@@ -1,0 +1,6 @@
+{
+  "nameShort": "VSCode (Clone)",
+  "nameLong": "Visual Studio Code (React Clone)",
+  "applicationName": "code-clone",
+  "darwinBundleIdentifier": "com.bhongy.vscode.react.clone"
+}

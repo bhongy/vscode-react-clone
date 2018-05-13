@@ -4,5 +4,5 @@ import App from './components/App';
 
 render(
   <App />,
-  document.getElementById('render-root')
+  document.getElementById('app')
 );

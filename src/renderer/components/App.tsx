@@ -2,21 +2,18 @@ import * as React from 'react';
 import { hot } from 'react-hot-loader';
 import { ipcRenderer } from 'electron';
 import { Watermark } from './Watermark';
+import './base.css';
 
-class App extends React.Component<{}, { count: number }> {
-  state = { count: 1 };
-
+class App extends React.Component {
   handleButtonClick = () => {
-    this.setState(prevState => ({ count: prevState.count + 1 }));
-    // ipcRenderer.send('window:create');
+    ipcRenderer.send('window:create');
   };
 
   render() {
     return (
       <div>
-        <h1>Hello World from Renderer {this.state.count}</h1>
-        <button onClick={this.handleButtonClick}>increment</button>
-        {/* <button onClick={this.handleButtonClick}>Create New Window</button> */}
+        <h1>Hello World from Renderer</h1>
+        <button onClick={this.handleButtonClick}>Create New Window</button>
         <Watermark />
       </div>
     );

@@ -1,7 +1,9 @@
 'use strict';
 
 import * as React from 'react';
+import styled from 'react-emotion';
 import { QuickOpenAction, ShowAllCommandsAction } from './quickopen/commands';
+import './Watermark.css';
 
 // TEMPORARY - implement i18n module
 const i18n = {
@@ -19,7 +21,7 @@ const keybindingsService = {
   getById(id: string): ResolvedKeybinding {
     return {
       get label() {
-        return '⇧ ⌘ P';
+        return '⇧⌘P';
       },
     };
   },
@@ -43,17 +45,19 @@ const showCommands: WatermarkEntry = {
 const noFolderEntries: Array<WatermarkEntry> = [showCommands, quickopen];
 const folderEntries: Array<WatermarkEntry> = [];
 
+const Shortcut = styled('pre')`
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+  letter-spacing: 0.25em;
+`;
+
 const Entry = ({ text, ids }: WatermarkEntry) => (
-  <dl>
+  <dl className="watermark__entry">
     <dd>{text}</dd>
     <dt>
       {ids.map(id => {
         const k = keybindingsService.getById(id);
-        return (
-          <span key={id} className="shortcuts">
-            {k.label}
-          </span>
-        );
+        return <Shortcut key={id}>{k.label}</Shortcut>;
       })}
     </dt>
   </dl>
@@ -62,7 +66,7 @@ const Entry = ({ text, ids }: WatermarkEntry) => (
 export const Watermark = () => {
   const entries = noFolderEntries;
   return (
-    <div>
+    <div className="watermark">
       {entries.map(({ text, ids }, i) => (
         <Entry key={i} text={text} ids={ids} />
       ))}

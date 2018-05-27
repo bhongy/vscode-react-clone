@@ -3,6 +3,7 @@ import { hot } from 'react-hot-loader';
 import { ipcRenderer } from 'electron';
 import { Watermark } from './Watermark';
 import './base.css';
+import './App.css';
 
 class App extends React.Component {
   handleButtonClick = () => {
@@ -11,8 +12,8 @@ class App extends React.Component {
 
   render() {
     return (
-      <div>
-        <h1>Hello World from Renderer</h1>
+      <div className="app-shell">
+        <p>Hello World from Renderer</p>
         <button onClick={this.handleButtonClick}>Create New Window</button>
         <Watermark />
       </div>

@@ -1,0 +1,8 @@
+/* monaco-shell & monaco-workbench */
+.app-shell {
+  /* font-family: Roboto, system-ui, sans-serif; */
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI',
+    'HelveticaNeue-Light', 'Ubuntu', 'Droid Sans', sans-serif;
+  font-size: 13px;
+  line-height: 1.4;
+}

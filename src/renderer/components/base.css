@@ -14,17 +14,10 @@ body, dl, p, pre {
   margin: 0;
 }
 
-body {
-  font-family: Roboto, system-ui, sans-serif;
-  font-size: 16px;
-  line-height: 1.5;
-  -webkit-font-smoothing: antialiased;
-}
-
 dd {
   margin-left: 0;
 }
 
 pre {
-  font-family: Consolas, Fira Mono, Monaco, monospace;
+  font-family: "Lucida Grande", Monaco, monospace;
 }

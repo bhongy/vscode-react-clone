@@ -1,7 +1,41 @@
 .watermark {
-
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  top: calc(50% + 55px);
+  width: 100%;
 }
 
+.watermark__content {
+  display: table;
+}
+
+/* TODO: this two-side table display could be a component */
+
 .watermark__entry {
-  display: flex;
+  display: table-row;
+	cursor: default;
+  height: 38px;
+  color: rgba(0,0,0,.68);
+  opacity: 0.8;
+}
+
+.watermark__entry dt,
+.watermark__entry dd {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.watermark__entry dt {
+  text-align: right;
+}
+
+.watermark__entry dd {
+  text-align: left;
+}
+
+.watermark__entry .shortcuts {
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+  letter-spacing: 0.15em;
 }

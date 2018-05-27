@@ -1,7 +1,6 @@
 'use strict';
 
 import * as React from 'react';
-import styled from 'react-emotion';
 import { QuickOpenAction, ShowAllCommandsAction } from './quickopen/commands';
 import './Watermark.css';
 
@@ -45,21 +44,19 @@ const showCommands: WatermarkEntry = {
 const noFolderEntries: Array<WatermarkEntry> = [showCommands, quickopen];
 const folderEntries: Array<WatermarkEntry> = [];
 
-const Shortcut = styled('pre')`
-  padding-left: 0.5em;
-  padding-right: 0.5em;
-  letter-spacing: 0.25em;
-`;
-
 const Entry = ({ text, ids }: WatermarkEntry) => (
   <dl className="watermark__entry">
-    <dd>{text}</dd>
-    <dt>
+    <dt>{text}</dt>
+    <dd>
       {ids.map(id => {
         const k = keybindingsService.getById(id);
-        return <Shortcut key={id}>{k.label}</Shortcut>;
+        return (
+          <pre key={id} className="shortcuts">
+            {k.label}
+          </pre>
+        );
       })}
-    </dt>
+    </dd>
   </dl>
 );
 
@@ -67,9 +64,11 @@ export const Watermark = () => {
   const entries = noFolderEntries;
   return (
     <div className="watermark">
-      {entries.map(({ text, ids }, i) => (
-        <Entry key={i} text={text} ids={ids} />
-      ))}
+      <div className="watermark__content">
+        {entries.map(({ text, ids }, i) => (
+          <Entry key={i} text={text} ids={ids} />
+        ))}
+      </div>
     </div>
   );
 };

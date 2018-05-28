@@ -1,13 +1,13 @@
 'use strict';
 
 type TCommand = {
-  readonly ID: string;
+  readonly id: string;
 };
 
 export const QuickOpenAction = {
-  ID: 'workbench.action.quickOpen',
+  id: 'workbench.action.quickOpen',
 };
 
 export const ShowAllCommandsAction = {
-  ID: 'workbench.action.showCommands',
+  id: 'workbench.action.showCommands',
 };

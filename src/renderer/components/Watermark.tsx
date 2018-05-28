@@ -1,7 +1,7 @@
 'use strict';
 
 import * as React from 'react';
-import { QuickOpenAction, ShowAllCommandsAction } from 'commands/workbenchCommands';
+import { QuickOpenAction, ShowAllCommandsAction } from '../commands/workbenchCommands';
 // TODO: pass via context - don't import as a singleton
 // another idea is to separate data from operations
 //   pass keybindingMap via context
@@ -24,12 +24,12 @@ type TWatermarkEntry = {
 
 const quickopen: TWatermarkEntry = {
   text: i18n.localize('watermark.quickOpen', 'Go to File'),
-  ids: [QuickOpenAction.ID],
+  ids: [QuickOpenAction.id],
 };
 
 const showCommands: TWatermarkEntry = {
   text: i18n.localize('watermark.showCommands', 'Show All Commands'),
-  ids: [ShowAllCommandsAction.ID],
+  ids: [ShowAllCommandsAction.id],
 };
 
 const noFolderEntries: Array<TWatermarkEntry> = [showCommands, quickopen];

@@ -3,9 +3,6 @@
 		"baseUrl": "./src",
 		"outDir": "./dist",
 		"paths": {
-      "commands/*": ["renderer/commands/*"],
-      "components/*": ["renderer/components/*"],
-      "services/*": ["renderer/services/*"],
 			"*": ["node_modules/*"]
 		},
 		"module": "commonjs",

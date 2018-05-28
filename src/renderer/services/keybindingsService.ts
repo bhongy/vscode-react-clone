@@ -3,7 +3,7 @@
 import {
   QuickOpenAction,
   ShowAllCommandsAction,
-} from 'commands/workbenchCommands';
+} from '../commands/workbenchCommands';
 
 type TKeybinding = {
   label: string;
@@ -11,8 +11,8 @@ type TKeybinding = {
 
 type TKeyBindingsRegistry = Map<string, TKeybinding>;
 const workbenchRegistry: TKeyBindingsRegistry = new Map([
-  [ShowAllCommandsAction.ID, { label: '⇧⌘P' }],
-  [QuickOpenAction.ID, { label: '⌘P' }],
+  [ShowAllCommandsAction.id, { label: '⇧⌘P' }],
+  [QuickOpenAction.id, { label: '⌘P' }],
 ]);
 
 // TODO: make reactive: change keybindings must cause related views to re-render

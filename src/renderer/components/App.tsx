@@ -5,6 +5,11 @@ import { Watermark } from './Watermark';
 import './base.css';
 import './App.css';
 
+function __TEMPORARY__boot() {
+  // start service: environment -> commands
+  //    register commands by mounting services
+}
+
 class App extends React.Component {
   handleButtonClick = () => {
     ipcRenderer.send('window:create');

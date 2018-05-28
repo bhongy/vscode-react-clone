@@ -1,7 +1,13 @@
 'use strict';
 
 import * as React from 'react';
-import { QuickOpenAction, ShowAllCommandsAction } from './quickopen/commands';
+import { QuickOpenAction, ShowAllCommandsAction } from 'commands/workbenchCommands';
+// TODO: pass via context - don't import as a singleton
+// another idea is to separate data from operations
+//   pass keybindingMap via context
+//   and instantiate the service here using the keybindingMap
+import { keybindingService } from '../services/keybindingsService';
+// import { isMacintosh } from '../services/environmentService';
 import './Watermark.css';
 
 // TEMPORARY - implement i18n module
@@ -11,48 +17,34 @@ const i18n = {
   },
 };
 
-// TEMPORARY - implement and pass via context
-interface ResolvedKeybinding {
-  label: string;
-}
-const keybindingsService = {
-  // TODO: alias to Keybindings.ID
-  getById(id: string): ResolvedKeybinding {
-    return {
-      get label() {
-        return '⇧⌘P';
-      },
-    };
-  },
-};
-
-interface WatermarkEntry {
+type TWatermarkEntry = {
   text: string;
   ids: Array<string>;
-}
+};
 
-const quickopen: WatermarkEntry = {
+const quickopen: TWatermarkEntry = {
   text: i18n.localize('watermark.quickOpen', 'Go to File'),
   ids: [QuickOpenAction.ID],
 };
 
-const showCommands: WatermarkEntry = {
+const showCommands: TWatermarkEntry = {
   text: i18n.localize('watermark.showCommands', 'Show All Commands'),
   ids: [ShowAllCommandsAction.ID],
 };
 
-const noFolderEntries: Array<WatermarkEntry> = [showCommands, quickopen];
-const folderEntries: Array<WatermarkEntry> = [];
+const noFolderEntries: Array<TWatermarkEntry> = [showCommands, quickopen];
+const folderEntries: Array<TWatermarkEntry> = [];
 
-const Entry = ({ text, ids }: WatermarkEntry) => (
+const unboundedText = i18n.localize('watermark.unboundCommand', 'unbound');
+const Entry = ({ text, ids }: TWatermarkEntry) => (
   <dl className="watermark__entry">
     <dt>{text}</dt>
     <dd>
       {ids.map(id => {
-        const k = keybindingsService.getById(id);
+        const k = keybindingService.getById(id);
         return (
           <pre key={id} className="shortcuts">
-            {k.label}
+            {k != null ? k.label : unboundedText}
           </pre>
         );
       })}
@@ -65,8 +57,8 @@ export const Watermark = () => {
   return (
     <div className="watermark">
       <div className="watermark__content">
-        {entries.map(({ text, ids }, i) => (
-          <Entry key={i} text={text} ids={ids} />
+        {entries.map(({ text, ids }) => (
+          <Entry key={ids.toString()} text={text} ids={ids} />
         ))}
       </div>
     </div>

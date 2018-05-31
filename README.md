@@ -14,7 +14,7 @@ Note: currently the folder structure as `main` versus `renderer` is dictated by 
 
 ## Design ideas
 
-- **Commands** defines what happens (handlers) within Code. Commands can be executed by other entities like 
+- **Commands** defines what happens (handlers) within Code. Commands can be executed by other entities like KeybindingsService or MenuService.
 - **KeyInputsService** are just a global singleton service that listen to user keyboard inputs and broadcast such events. It's just a boundary entity that bridges I/O to the data stream in the system - not sure why it should exists at all yet but I like the idea that it is the only entity that is responsible for this. It should not make decision (aim for zero logic). It should be *de*coupled from keybindings service and context service.
 - **ContextService** (not sure yet) this is a stateful service. First support came to mind is to support keybindings "when" like "when `editorTextFocus`".
 - **KeybindingsService** depends on KeyInputsService and ContextService. It's just a simple map - given event stream of key inputs and current context, issue a command (handler). Probably aim for every keybinding will map to a command - never a adhoc function.

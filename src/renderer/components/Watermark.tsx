@@ -58,7 +58,7 @@ const Entry = ({ commandId, description, shortcuts }: TEntryProps) => (
 );
 
 const entryToProps = (entry: TWatermarkEntry): TEntryProps => {
-  const keybinding = keybindingService.getByCommandId(entry.commandId);
+  const keybinding = keybindingService.findByCommandId(entry.commandId);
   return {
     ...entry,
     shortcuts: keybinding ? keybinding.label : '',

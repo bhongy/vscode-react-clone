@@ -23,7 +23,7 @@ class KeybindingService {
     this._keybindingsMap = keybindingsMap;
   }
 
-  public getById(commandId: string): TKeybinding | void {
+  public findByCommandId(commandId: string): TKeybinding | void {
     return this._keybindingsMap.get(commandId);
   }
 }

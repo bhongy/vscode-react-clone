@@ -17,14 +17,14 @@ const workbenchRegistry: TKeyBindingsRegistry = new Map([
 
 // TODO: make reactive: change keybindings must cause related views to re-render
 class KeybindingService {
-  private _keybindingsMap: TKeyBindingsRegistry;
+  private _keybindingsRegistry: TKeyBindingsRegistry;
 
-  public constructor(keybindingsMap: TKeyBindingsRegistry) {
-    this._keybindingsMap = keybindingsMap;
+  public constructor(keybindingsRegistry: TKeyBindingsRegistry) {
+    this._keybindingsRegistry = keybindingsRegistry;
   }
 
   public findByCommandId(commandId: string): TKeybinding | void {
-    return this._keybindingsMap.get(commandId);
+    return this._keybindingsRegistry.get(commandId);
   }
 }
 

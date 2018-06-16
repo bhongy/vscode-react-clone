@@ -18,14 +18,13 @@ function createWindow() {
   const { id } = window;
 
   windowsById.set(id, window);
-  window.loadURL(entry);
-  window.webContents.on('devtools-opened', () => {
-    window.focus();
-  });
 
   window.on('closed', () => {
     windowsById.delete(id);
   });
+
+  window.loadURL(entry);
+  window.focus();
 }
 
 app.on('ready', () => {

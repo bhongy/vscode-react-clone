@@ -1,17 +1,20 @@
 {
-	"compilerOptions": {
-		"baseUrl": "./src",
-		"outDir": "./dist",
-		"paths": {
-			"*": ["node_modules/*"]
-		},
-		"module": "commonjs",
-		"moduleResolution": "node",
-    "target": "es2015",
+  "version": "2.8.3",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "outDir": "dist",
+    "paths": {
+      "*": ["node_modules/*"],
+    },
     "jsx": "react",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "target": "es2016",
+    // "noEmitOnError": true,
+    "noImplicitAny": true,
+    "removeComments": true,
     "sourceMap": true,
-		"noImplicitAny": true,
-		"strictNullChecks": true
-	},
-	"include": ["src/**/*"]
+    "strictNullChecks": true
+  },
+  "files": ["src/main/index.ts", "src/renderer/index.tsx"]
 }

@@ -3,7 +3,7 @@
 import {
   QuickOpenAction,
   ShowAllCommandsAction,
-} from '../commands/workbenchCommands';
+} from '@/commands/workbenchCommands';
 
 type TKeybinding = {
   label: string;

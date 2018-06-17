@@ -4,13 +4,13 @@ import * as React from 'react';
 import {
   QuickOpenAction,
   ShowAllCommandsAction,
-} from '../commands/workbenchCommands';
+} from '@/commands/workbenchCommands';
 // TODO: pass via context - don't import as a singleton
 // another idea is to separate data from operations
 //   pass keybindingMap via context
 //   and instantiate the service here using the keybindingMap
-import { keybindingService } from '../services/keybindingsService';
-// import { isMacintosh } from '../services/environmentService';
+import { keybindingService } from '@/services/keybindingsService';
+// import { isMacintosh } from '@/services/environmentService';
 import './Watermark.css';
 
 // TEMPORARY - implement i18n module

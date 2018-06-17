@@ -5,6 +5,8 @@
     "outDir": "dist",
     "paths": {
       "*": ["node_modules/*"],
+      "@/*": ["src/renderer/*"],
+      "common/*": ["src/common/*"]
     },
     "jsx": "react",
     "module": "commonjs",

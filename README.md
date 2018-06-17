@@ -23,3 +23,4 @@ Note: currently the folder structure as `main` versus `renderer` is dictated by 
 
 - [ ] Fork `electron-webpack` for more flexible control of project structure
 - [ ] Organize project by features (e.g. editor, quickopen) rather than by types (e.g. components, services)
+- [ ] Setup [devtron](https://github.com/electron/devtron) and ensure that it works with webpack - i.e. `__dirname`

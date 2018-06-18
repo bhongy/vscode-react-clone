@@ -21,7 +21,6 @@ Note: currently the folder structure as `main` versus `renderer` is dictated by 
 
 ## Todos
 
-- [ ] Upgrade to typescript 2.9
 - [ ] Setup [devtron](https://github.com/electron/devtron) and ensure that it works with webpack - i.e. `__dirname`
 - [ ] Setup tslint after ts, webpack and jest setups are all good.
 - [ ] Organize project by features (e.g. editor, quickopen) rather than by types (e.g. components, services)

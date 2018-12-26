@@ -1,6 +1,8 @@
 'use strict';
 
 import * as React from 'react';
+import { TCommand } from '@/commands/main';
+// TODO: maybe have @/commands/main re-export this
 import {
   QuickOpenAction,
   ShowAllCommandsAction,
@@ -20,10 +22,12 @@ const i18n = {
   },
 };
 
-type TWatermarkEntry = {
-  commandId: string;
+interface TWatermarkEntry {
+  commandId: TCommand['id'];
+  // description belongs in this type not the command
+  // because it's how Watermark wants to describe the commmands
   description: string;
-};
+}
 
 const quickopen: TWatermarkEntry = {
   commandId: QuickOpenAction.id,
@@ -38,20 +42,18 @@ const showCommands: TWatermarkEntry = {
 // const noFolderEntries: Array<TWatermarkEntry> = [showCommands, quickopen];
 const folderEntries: Array<TWatermarkEntry> = [showCommands, quickopen];
 
-type TEntryProps = {
-  commandId: string;
+interface TEntryProps {
+  commandId: TCommand['id'];
   description: string;
   shortcuts: string;
-};
+}
 
 const Entry = ({ commandId, description, shortcuts }: TEntryProps) => (
   <dl className="watermark__entry">
     <dt>{description}</dt>
     <dd>
       <pre key={commandId} className="shortcuts">
-        {shortcuts.length > 0
-          ? shortcuts
-          : i18n.localize('watermark.unboundCommand', 'unbound')}
+        {shortcuts}
       </pre>
     </dd>
   </dl>
@@ -61,7 +63,9 @@ const entryToProps = (entry: TWatermarkEntry): TEntryProps => {
   const keybinding = keybindingService.findByCommandId(entry.commandId);
   return {
     ...entry,
-    shortcuts: keybinding ? keybinding.label : '',
+    shortcuts: keybinding
+      ? keybinding.label
+      : i18n.localize('watermark.unboundCommand', 'unbound'),
   };
 };
 
@@ -70,7 +74,9 @@ export const Watermark = () => {
   return (
     <div className="watermark">
       <div className="watermark__content">
-        {entriesProps.map(o => <Entry key={o.commandId} {...o} />)}
+        {entriesProps.map(o => (
+          <Entry key={o.commandId} {...o} />
+        ))}
       </div>
     </div>
   );

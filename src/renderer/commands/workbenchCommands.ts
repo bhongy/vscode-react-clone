@@ -1,13 +1,17 @@
 'use strict';
 
-type TCommand = {
-  readonly id: string;
-};
+export interface TQuickOpenAction {
+  readonly id: 'workbench.action.quickOpen';
+}
 
-export const QuickOpenAction = {
+export const QuickOpenAction: TQuickOpenAction = {
   id: 'workbench.action.quickOpen',
 };
 
-export const ShowAllCommandsAction = {
+export interface TShowAllCommandsAction {
+  readonly id: 'workbench.action.showCommands';
+}
+
+export const ShowAllCommandsAction: TShowAllCommandsAction = {
   id: 'workbench.action.showCommands',
 };

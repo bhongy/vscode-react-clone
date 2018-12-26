@@ -11,12 +11,20 @@
     "jsx": "react",
     "module": "commonjs",
     "moduleResolution": "node",
-    "target": "es2016",
+    "target": "es2017",
     // "noEmitOnError": true,
+
+    "alwaysStrict": true,
+    "forceConsistentCasingInFileNames": true,
     "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
     "removeComments": true,
-    "sourceMap": true,
-    "strictNullChecks": true
+    // "strictBindCallApply": true,
+    // "strictFunctionTypes": true,
+    "strictNullChecks": true,
+    "strictPropertyInitialization": true,
+    "sourceMap": true
   },
   "files": ["src/main/index.ts", "src/renderer/index.tsx"]
 }

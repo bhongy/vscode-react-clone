@@ -19,6 +19,20 @@ Note: currently the folder structure as `main` versus `renderer` is dictated by 
 - **ContextService** is a stateful service. First support came to mind is to combine with keybindings result to support issuing different commands based on "where" or "when" like "when `editorTextFocus`".
 - **KeybindingsService** depends on KeyInputsService and ContextService. It's just a simple map - given event stream of key inputs and current context, issue a command (handler). Probably aim for every keybinding will map to a command - never an adhoc function.
 
+
+## Glossary (TBD)
+
+### Command
+A data structure (not side-effect). This is how to "request" vscode to "do" something.
+TODO: we might need a command interpreter where side-effect happens so that the commands being passed around is a serializable object (functional core) not ones that contain a function.
+
+### Key Combo (keyCombo)
+A data structure representing a set of keys (like `⇧⌘P`) pressed in the same time.
+
+### Keybinding
+A mapping of a key combo to a command - i.e. when a key combo is pressed, what command it will issue.
+
+
 ## Todos
 
 - [ ] Setup [devtron](https://github.com/electron/devtron) and ensure that it works with webpack - i.e. `__dirname`

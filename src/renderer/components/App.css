@@ -1,7 +1,12 @@
 /* monaco-shell & monaco-workbench */
-.app-shell {
+.App {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI',
     'HelveticaNeue-Light', 'Ubuntu', 'Droid Sans', sans-serif;
   font-size: 13px;
   line-height: 1.4;
+}
+
+.App__PositionContext {
+  position: relative;
+  min-height: 100vh;
 }

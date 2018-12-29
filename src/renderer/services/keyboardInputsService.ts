@@ -10,14 +10,12 @@
  */
 
 import { fromEvent } from 'rxjs';
+import { filter } from 'rxjs/operators';
 
-export const keyboardEvent$ = fromEvent<KeyboardEvent>(document, 'keydown');
+// https://developer.mozilla.org/en-US/docs/Web/API/Event/isTrusted
+const fromUserAction = (e: KeyboardEvent): boolean => e.isTrusted;
+const keyboardEvent$ = fromEvent(document, 'keydown').pipe(filter(fromUserAction));
 
-// interface TKeyCombo { key, altKey, ctrlKey, metaKey, shiftKey }
-// -- KeyCombo is probably the standard message that we'll pass around
-// keyboardEventToKeyDescription :: KeyboardEvent -> KeyCombo
-// keyComboToLabel :: KeyCombo -> Label `⌘P`
-
-// Context (when, where) -> KeyCombo -> Command (data)
-// e.g. we don't handle keybindings when setting keybindings
-// or same KeyCombo result in different command where different part has focus
+const isAlphabet = (key: string): boolean => /^[a-z]$/i.test(key);
+// TODO: how to unit test this?
+export const alphabetKeyboardEvent$ = keyboardEvent$.pipe(filter(isAlphabet));

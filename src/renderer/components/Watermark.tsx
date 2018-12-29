@@ -39,6 +39,9 @@ const showCommands: TWatermarkEntry = {
   description: i18n.localize('watermark.showCommands', 'Show All Commands'),
 };
 
+// TODO: how to I guarantee that these commands & keybindings are registered
+//   when this component claims that they are
+//   currently there is no connection - they could be out of sync easily
 // const noFolderEntries: Array<TWatermarkEntry> = [showCommands, quickopen];
 const folderEntries: Array<TWatermarkEntry> = [showCommands, quickopen];
 

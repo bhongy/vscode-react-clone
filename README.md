@@ -35,7 +35,10 @@ A mapping of a key combo to a command - i.e. when a key combo is pressed, what c
 
 ## Todos
 
+- [ ] Use implicit use strict in tsconfig
+- [ ] Audit `tsconfig.json -> compilerOptions` and see if there're stricter rules that should be added
+- [ ] Dockerize dev env because I ran into node version mismatch and electron needs to be rebuild a few times already
+- [ ] See if any of the services belong to electron's "main" rather than "renderer" (need to read more)
 - [ ] Setup [devtron](https://github.com/electron/devtron) and ensure that it works with webpack - i.e. `__dirname`
 - [ ] Setup tslint after ts, webpack and jest setups are all good.
-- [ ] Audit `tsconfig.json -> compilerOptions` and see if there're stricter rules that should be added
 - [ ] Organize project by features (e.g. editor, quickopen) rather than by types (e.g. components, services)

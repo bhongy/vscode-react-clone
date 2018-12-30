@@ -14,8 +14,12 @@ import { filter } from 'rxjs/operators';
 
 // https://developer.mozilla.org/en-US/docs/Web/API/Event/isTrusted
 const fromUserAction = (e: KeyboardEvent): boolean => e.isTrusted;
-const keyboardEvent$ = fromEvent(document, 'keydown').pipe(filter(fromUserAction));
+const keyboardEvent$ = fromEvent(document, 'keydown').pipe(
+  filter(fromUserAction)
+);
 
 const isAlphabet = (key: string): boolean => /^[a-z]$/i.test(key);
 // TODO: how to unit test this?
-export const alphabetKeyboardEvent$ = keyboardEvent$.pipe(filter(isAlphabet));
+export const alphabetKeyboardEvent$ = keyboardEvent$.pipe(
+  filter(e => isAlphabet(e.key))
+);

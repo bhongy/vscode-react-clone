@@ -27,7 +27,7 @@
     "electron-webpack-ts": "3.1.0",
     "jest": "^23.1.0",
     "react-hot-loader": "^4.1.3",
-    "ts-jest": "^22.4.6",
+    "ts-jest": "^23.10.5",
     "typescript": "3.2.2",
     "webpack": "4.28.1"
   }

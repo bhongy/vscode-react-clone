@@ -24,6 +24,13 @@ const modifierKeyToSymbol: TModifierSymbol = {
   shiftKey: '⇧',
 };
 
+const orderedModifierSymbolKeys: Array<keyof TModifierSymbol> = [
+  'ctrlKey',
+  'shiftKey',
+  'altKey',
+  'metaKey',
+];
+
 // keyToSymbol
 function toModifierSymbol<K extends keyof TModifierSymbol>(
   modifierKey: K
@@ -33,9 +40,7 @@ function toModifierSymbol<K extends keyof TModifierSymbol>(
 
 // keyComboToSymbols
 export function toModifierSymbols(keyCombo: Partial<TKeyCombo>) {
-  return Object.keys(modifierKeyToSymbol)
-    // need to provide extra type info because typescript built-in lib.es5.d.ts
-    // type Object.keys to always return `string[]` rather than infer T
-    .filter((k: keyof TModifierSymbol) => keyCombo[k])
+  return orderedModifierSymbolKeys
+    .filter(k => keyCombo[k])
     .map(toModifierSymbol);
 }

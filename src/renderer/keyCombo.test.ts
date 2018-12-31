@@ -13,7 +13,18 @@ describe(toModifierSymbols.name, () => {
         metaKey: true,
         shiftKey: true,
       })
-    ).toEqual(['⌃', '⌘', '⇧']);
+    ).toEqual(expect.arrayContaining(['⌃', '⌘', '⇧']));
+  });
+
+  it('returns the correct order of key modifier symbols', () => {
+    expect(
+      toModifierSymbols({
+        altKey: true,
+        ctrlKey: true,
+        metaKey: true,
+        shiftKey: true,
+      })
+    ).toEqual(['⌃', '⇧', '⌥', '⌘']);
   });
 
   it('ignores non-modifier properties', () => {

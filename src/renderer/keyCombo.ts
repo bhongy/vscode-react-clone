@@ -44,3 +44,12 @@ export function toModifierSymbols(keyCombo: Partial<TKeyCombo>) {
     .filter(k => keyCombo[k])
     .map(toModifierSymbol);
 }
+
+export function formatLabel(keyCombo: TKeyCombo): string | undefined {
+  if (keyCombo.key === '') {
+    return undefined;
+  }
+  const { key, ...modifierProps } = keyCombo;
+  const modifiers = toModifierSymbols(modifierProps);
+  return modifiers.join('') + key.toUpperCase();
+}

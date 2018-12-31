@@ -1,6 +1,6 @@
 'use strict';
 
-interface TKeyCombo {
+export interface TKeyCombo {
   key: string;
   altKey: boolean;
   ctrlKey: boolean;

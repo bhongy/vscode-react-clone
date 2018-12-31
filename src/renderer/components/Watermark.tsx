@@ -11,7 +11,7 @@ import {
 // another idea is to separate data from operations
 //   pass keybindingMap via context
 //   and instantiate the service here using the keybindingMap
-import { keybindingService } from '@/services/keybindingsService';
+import { keybindingsService } from '@/services/keybindingsService';
 // import { isMacintosh } from '@/services/environmentService';
 import './Watermark.css';
 
@@ -63,7 +63,7 @@ const Entry = ({ commandId, description, shortcuts }: TEntryProps) => (
 );
 
 const entryToProps = (entry: TWatermarkEntry): TEntryProps => {
-  const keybinding = keybindingService.findByCommandId(entry.commandId);
+  const keybinding = keybindingsService.findByCommandId(entry.commandId);
   return {
     ...entry,
     shortcuts: keybinding

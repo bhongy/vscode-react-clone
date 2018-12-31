@@ -11,36 +11,105 @@
  *   _resolved_ from all keybindings lists (default, extensions, user's, workspace).
  */
 
+import { TKeyCombo, formatLabel } from '@/keyCombo';
 import { TCommand } from '@/commands/main';
+// TODO: create keybinding resolvers that takes default/user configs
+// so we don't hardcode these into the keybinding service
 import {
   QuickOpenAction,
   ShowAllCommandsAction,
 } from '@/commands/workbenchCommands';
 
-interface TKeybinding {
-  label: string;
+// interface TKeybindingsService {
+//   findByCommandId(commandId: TCommand['id']): TKeybinding | undefined;
+//   findByKeyCombo(keyCombo: TKeyCombo): TCommand | undefined;
+// }
+
+type TCommandToKeyCombo = { readonly [P in TCommand['id']]: TKeyCombo };
+
+// look up by CommandId rather than Command
+// because CommandId is the data that's being passed around the system
+class CommandToKeyComboResolver {
+  private readonly record: TCommandToKeyCombo;
+
+  constructor(record: TCommandToKeyCombo) {
+    this.record = record;
+  }
+
+  findByCommandId(commandId: TCommand['id']): TKeyCombo | undefined {
+    return this.record[commandId];
+  }
 }
 
-type TKeyBindingsRegistry = Map<TCommand['id'], TKeybinding>;
+class KeyComboToCommandResolver {
+  private readonly record: { [k: string]: TCommand['id'] };
+  private static formatKey = formatLabel;
 
-// TODO: make reactive: change keybindings must cause related views to re-render
-class KeybindingService {
-  private _keybindingsRegistry: TKeyBindingsRegistry;
+  constructor(record: TCommandToKeyCombo) {
+    this.record = Object.entries(record).reduce(
+      (prev, [commandId, keyCombo]) => {
+        const key = KeyComboToCommandResolver.formatKey(keyCombo);
+        return Object.assign(prev, { [key]: commandId });
+      },
+      {}
+    );
+  }
 
-  constructor(keybindingsRegistry: TKeyBindingsRegistry) {
-    this._keybindingsRegistry = keybindingsRegistry;
+  findByKeyCombo(keyCombo: TKeyCombo): TCommand['id'] | undefined {
+    const key = KeyComboToCommandResolver.formatKey(keyCombo);
+    return this.record[key];
+  }
+}
+
+interface TKeybinding {
+  readonly label: string;
+  // readonly source: 'default' | 'user';
+}
+
+// Support two-way lookup:
+// - keyCombo -> commandId
+// - commandId -> keyCombo
+export class KeybindingsService {
+  private readonly keyComboResolver: CommandToKeyComboResolver;
+  private readonly commandResolver: KeyComboToCommandResolver;
+
+  constructor(resolvedKeybindings: TCommandToKeyCombo) {
+    this.keyComboResolver = new CommandToKeyComboResolver(resolvedKeybindings);
+    this.commandResolver = new KeyComboToCommandResolver(resolvedKeybindings);
   }
 
   findByCommandId(commandId: TCommand['id']): TKeybinding | undefined {
-    return this._keybindingsRegistry.get(commandId);
+    const keyCombo = this.keyComboResolver.findByCommandId(commandId);
+    if (keyCombo == null) {
+      return undefined;
+    }
+    return { label: formatLabel(keyCombo) };
   }
+
+  // findAllByCommandId(commandId: TCommand['id']): Array<TKeybinding> | [];
+
+  // findByKeyCombo(keyCombo: TKeyCombo): TCommand['id'] | undefined {
+  //   return this.commandResolver.findByKeyCombo(keyCombo);
+  // }
 }
 
-const workbenchRegistry = new Map([
-  [ShowAllCommandsAction.id, { label: '⇧⌘P' }],
-  [QuickOpenAction.id, { label: '⌘P' }],
-]);
+const TEMPORARY_RESOLVED_KEYBINDINGS: TCommandToKeyCombo = {
+  [QuickOpenAction.id]: {
+    key: 'p',
+    altKey: false,
+    ctrlKey: false,
+    metaKey: true,
+    shiftKey: false,
+  },
+  [ShowAllCommandsAction.id]: {
+    key: 'P',
+    altKey: false,
+    ctrlKey: false,
+    metaKey: true,
+    shiftKey: true,
+  },
+};
 
-const allRegistries = new Map([...workbenchRegistry]);
-
-export const keybindingService = new KeybindingService(allRegistries);
+export const keybindingsService = new KeybindingsService(
+  TEMPORARY_RESOLVED_KEYBINDINGS
+);

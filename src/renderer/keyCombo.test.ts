@@ -46,7 +46,7 @@ describe('keyCombo', () => {
       ).toEqual('⇧⌥⌘C');
     });
 
-    it('returns `undefined` when `key` is an empty string', () => {
+    it('returns an empty string when `key` is an empty string', () => {
       expect(
         formatLabel({
           key: '',
@@ -55,7 +55,7 @@ describe('keyCombo', () => {
           metaKey: true,
           shiftKey: true,
         })
-      ).toBeUndefined();
+      ).toBe('');
     });
   });
 });

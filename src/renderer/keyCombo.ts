@@ -45,9 +45,9 @@ export function toModifierSymbols(keyCombo: Partial<TKeyCombo>) {
     .map(toModifierSymbol);
 }
 
-export function formatLabel(keyCombo: TKeyCombo): string | undefined {
+export function formatLabel(keyCombo: TKeyCombo): string {
   if (keyCombo.key === '') {
-    return undefined;
+    return '';
   }
   const { key, ...modifierProps } = keyCombo;
   const modifiers = toModifierSymbols(modifierProps);

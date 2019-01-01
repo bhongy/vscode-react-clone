@@ -1,18 +1,18 @@
 'use strict';
 
 import * as React from 'react';
-import { TCommand } from '@/commands/main';
-// TODO: maybe have @/commands/main re-export this
+import { TCommand } from '@code/commands/main';
+// TODO: maybe have @code/commands/main re-export this
 import {
   QuickOpenAction,
   ShowAllCommandsAction,
-} from '@/commands/workbenchCommands';
+} from '@code/commands/workbenchCommands';
 // TODO: pass via context - don't import as a singleton
 // another idea is to separate data from operations
 //   pass keybindingMap via context
 //   and instantiate the service here using the keybindingMap
-import { keybindingsService } from '@/services/keybindingsService';
-// import { isMacintosh } from '@/services/environmentService';
+import { keybindingsService } from '@code/services/keybindingsService';
+// import { isMacintosh } from '@code/services/environmentService';
 import './Watermark.css';
 
 // TEMPORARY - implement i18n module

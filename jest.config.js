@@ -6,6 +6,5 @@ module.exports = {
   moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx'],
   moduleNameMapper: {
     '^@code/(.*)$': '<rootDir>/src/renderer/$1',
-    '^@/(.*)': '<rootDir>/src/renderer/$1',
   },
 };

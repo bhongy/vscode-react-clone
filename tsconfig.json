@@ -1,11 +1,10 @@
 {
   "version": "3.2.2",
   "compilerOptions": {
-    "baseUrl": ".",
+    "baseUrl": "./",
     "outDir": "dist",
     "paths": {
       "@code/*": ["src/renderer/*"],
-      "@/*": ["src/renderer/*"],
       "*": ["node_modules/*"]
     },
     "jsx": "react",

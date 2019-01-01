@@ -12,13 +12,13 @@
  */
 
 // TODO: using alias import break tests - fix jest config (moduleNameMapper)
-import { TKeyCombo, formatLabel } from '../keyCombo';
+import { TKeyCombo, formatLabel } from '@code/keyCombo';
 // TODO: create keybinding resolvers that takes default/user configs
 // so we don't hardcode these into the keybinding service
 import {
   QuickOpenAction,
   ShowAllCommandsAction,
-} from '../commands/workbenchCommands';
+} from '@code/commands/workbenchCommands';
 
 // Partial -> lookup can fail
 type TStringToKeyCombo = Partial<{ readonly [k: string]: TKeyCombo }>;

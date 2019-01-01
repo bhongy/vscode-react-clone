@@ -4,9 +4,9 @@
     "baseUrl": ".",
     "outDir": "dist",
     "paths": {
-      "*": ["node_modules/*"],
+      "@code/*": ["src/renderer/*"],
       "@/*": ["src/renderer/*"],
-      "common/*": ["src/common/*"]
+      "*": ["node_modules/*"]
     },
     "jsx": "react",
     "module": "commonjs",

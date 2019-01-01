@@ -9,10 +9,14 @@
  *
  * The service is created by (its input is) a list of **all** keybindings (command to keyCombo)
  *   _resolved_ from all keybindings lists (default, extensions, user's, workspace).
+ *
+ * Type on TCommand because the application define the complete list of supported commands
+ * hence we know the exact possible values of command id(s) at compile time.
+ * TCommand is the ubiquitous language in the application.
  */
 
-// TODO: using alias import break tests - fix jest config (moduleNameMapper)
 import { TKeyCombo, formatLabel } from '@code/keyCombo';
+import { TCommand } from '@code/commands/main';
 // TODO: create keybinding resolvers that takes default/user configs
 // so we don't hardcode these into the keybinding service
 import {
@@ -20,33 +24,37 @@ import {
   ShowAllCommandsAction,
 } from '@code/commands/workbenchCommands';
 
-// Partial -> lookup can fail
-type TStringToKeyCombo = Partial<{ readonly [k: string]: TKeyCombo }>;
+// Partial<...>
+// - to ensurce lookup failure (undefined) is handled
+// - to allow using subset of `TCommand` to configure the service in testing
+type TCommandIdToKeyCombo = Partial<
+  { readonly [K in TCommand['id']]: TKeyCombo }
+>;
 
 // look up by CommandId rather than Command
 // because CommandId is the data that's being passed around the system
 class CommandToKeyComboResolver {
-  private readonly record: TStringToKeyCombo;
+  private readonly record: TCommandIdToKeyCombo;
 
-  constructor(resolvedKeybindings: TStringToKeyCombo) {
+  constructor(resolvedKeybindings: TCommandIdToKeyCombo) {
     this.record = resolvedKeybindings;
   }
 
-  findByCommandId(commandId: string): TKeyCombo | undefined {
+  findByCommandId(commandId: TCommand['id']): TKeyCombo | undefined {
     return this.record[commandId];
   }
 }
 
-class KeyComboToCommandResolver<T extends TStringToKeyCombo, CommandId = keyof T> {
-  // Partial -> lookup can fail
-  // value type is `keyof T` because we know it's not just any string
-  // return type of string here is not very useful
-  private readonly record: Partial<{ [serializedKeyCombo: string]: CommandId }>;
-  // TODO: abstract get/set on record (probably use proxy) so formatKey is hidden
-  // and the key can just conceptually be the TKeyCombo object
+class KeyComboToCommandResolver {
+  // Partial<...> to ensurce lookup failure (undefined) is handled
+  private readonly record: Partial<{
+    readonly [serializedKeyCombo: string]: TCommand['id'];
+  }>;
+  // TODO: abstract get/set on record (probably use proxy) so formatKey
+  // is hidden and the key can just conceptually be the TKeyCombo object
   private static formatKey = formatLabel;
 
-  constructor(resolvedKeybindings: T) {
+  constructor(resolvedKeybindings: TCommandIdToKeyCombo) {
     this.record = Object.entries(resolvedKeybindings)
       .filter(
         (entry): entry is [string, TKeyCombo] => {
@@ -64,9 +72,7 @@ class KeyComboToCommandResolver<T extends TStringToKeyCombo, CommandId = keyof T
       );
   }
 
-  // return `K` because we can guarantee the exact set of the output
-  // if the lookup fail we return undefined
-  findByKeyCombo(keyCombo: TKeyCombo): CommandId | undefined {
+  findByKeyCombo(keyCombo: TKeyCombo): TCommand['id'] | undefined {
     const key = KeyComboToCommandResolver.formatKey(keyCombo);
     return this.record[key];
   }
@@ -80,16 +86,16 @@ interface TKeybinding {
 // Support two-way lookup:
 // - keyCombo -> commandId
 // - commandId -> keyCombo
-export class KeybindingsService<T extends TStringToKeyCombo> {
+export class KeybindingsService {
   private readonly keyComboResolver: CommandToKeyComboResolver;
-  private readonly commandResolver: KeyComboToCommandResolver<T>;
+  private readonly commandResolver: KeyComboToCommandResolver;
 
-  constructor(resolvedKeybindings: T) {
+  constructor(resolvedKeybindings: TCommandIdToKeyCombo) {
     this.keyComboResolver = new CommandToKeyComboResolver(resolvedKeybindings);
     this.commandResolver = new KeyComboToCommandResolver(resolvedKeybindings);
   }
 
-  findByCommandId(commandId: string): TKeybinding | undefined {
+  findByCommandId(commandId: TCommand['id']): TKeybinding | undefined {
     const keyCombo = this.keyComboResolver.findByCommandId(commandId);
     return typeof keyCombo !== 'undefined'
       ? { label: formatLabel(keyCombo) }
@@ -98,7 +104,7 @@ export class KeybindingsService<T extends TStringToKeyCombo> {
 
   // findAllByCommandId(commandId: keyof T): Array<TKeybinding> | [];
 
-  findByKeyCombo(keyCombo: TKeyCombo): keyof T | undefined {
+  findByKeyCombo(keyCombo: TKeyCombo): TCommand['id'] | undefined {
     return this.commandResolver.findByKeyCombo(keyCombo);
   }
 }

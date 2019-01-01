@@ -1,22 +1,21 @@
 'use strict';
 
 import { KeybindingsService } from './keybindingsService';
+import {
+  QuickOpenAction,
+  ShowAllCommandsAction,
+} from '@code/commands/workbenchCommands';
 
 describe('KeybindingsService', () => {
-  enum COMMAND_ID {
-    quickOpen = 'quickOpen',
-    allCommands = 'allCommands',
-  }
-
   const resolvedKeybindings = {
-    [COMMAND_ID.quickOpen]: {
+    [QuickOpenAction.id]: {
       key: 'p',
       altKey: false,
       ctrlKey: false,
       metaKey: true,
       shiftKey: false,
     },
-    [COMMAND_ID.allCommands]: {
+    [ShowAllCommandsAction.id]: {
       key: 'P',
       altKey: false,
       ctrlKey: false,
@@ -25,58 +24,64 @@ describe('KeybindingsService', () => {
     },
   };
 
-  const keybindingsService = new KeybindingsService(resolvedKeybindings);
+  let service: KeybindingsService;
+  beforeEach(() => {
+    service = new KeybindingsService(resolvedKeybindings);
+  });
 
-  describe(keybindingsService.findByCommandId.name, () => {
+  describe('findByCommandId', () => {
     it('returns the keybinding for the command id', () => {
-      expect(keybindingsService.findByCommandId(COMMAND_ID.quickOpen)).toEqual({
+      expect(service.findByCommandId(QuickOpenAction.id)).toEqual({
         label: '⌘P',
       });
-      expect(
-        keybindingsService.findByCommandId(COMMAND_ID.allCommands)
-      ).toEqual({
+      expect(service.findByCommandId(ShowAllCommandsAction.id)).toEqual({
         label: '⇧⌘P',
       });
     });
 
     it('returns `undefined` if the keybinding for the command id is not found', () => {
-      const keybinding = keybindingsService.findByCommandId('doesNotExist');
-      expect(keybinding).toBeUndefined();
+      service = new KeybindingsService({
+        [QuickOpenAction.id]: undefined,
+      });
+
+      expect(service.findByCommandId(QuickOpenAction.id)).toBeUndefined();
+      expect(service.findByCommandId(ShowAllCommandsAction.id)).toBeUndefined();
     });
   });
 
-  describe(keybindingsService.findByKeyCombo.name, () => {
+  describe('findByKeyCombo', () => {
     it('returns the associated command id for the key combo', () => {
       expect(
-        keybindingsService.findByKeyCombo({
+        service.findByKeyCombo({
           key: 'p',
           altKey: false,
           ctrlKey: false,
           metaKey: true,
           shiftKey: false,
         })
-      ).toEqual(COMMAND_ID.quickOpen);
+      ).toEqual(QuickOpenAction.id);
 
       expect(
-        keybindingsService.findByKeyCombo({
+        service.findByKeyCombo({
           key: 'P',
           altKey: false,
           ctrlKey: false,
           metaKey: true,
           shiftKey: true,
         })
-      ).toEqual(COMMAND_ID.allCommands);
+      ).toEqual(ShowAllCommandsAction.id);
     });
 
-    it('returns `undefined` if the key combo is not set for any command', () => {
-      const keybinding = keybindingsService.findByKeyCombo({
-        key: 'z',
-        altKey: false,
-        ctrlKey: false,
-        metaKey: false,
-        shiftKey: false,
-      });
-      expect(keybinding).toBeUndefined();
+    it('returns `undefined` if the key combo is not used for any command', () => {
+      expect(
+        service.findByKeyCombo({
+          key: 'z',
+          altKey: false,
+          ctrlKey: false,
+          metaKey: false,
+          shiftKey: false,
+        })
+      ).toBeUndefined();
     });
   });
 });

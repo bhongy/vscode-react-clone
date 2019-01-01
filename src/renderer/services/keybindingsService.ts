@@ -11,51 +11,62 @@
  *   _resolved_ from all keybindings lists (default, extensions, user's, workspace).
  */
 
-import { TKeyCombo, formatLabel } from '@/keyCombo';
-import { TCommand } from '@/commands/main';
+// TODO: using alias import break tests - fix jest config (moduleNameMapper)
+import { TKeyCombo, formatLabel } from '../keyCombo';
 // TODO: create keybinding resolvers that takes default/user configs
 // so we don't hardcode these into the keybinding service
 import {
   QuickOpenAction,
   ShowAllCommandsAction,
-} from '@/commands/workbenchCommands';
+} from '../commands/workbenchCommands';
 
-// interface TKeybindingsService {
-//   findByCommandId(commandId: TCommand['id']): TKeybinding | undefined;
-//   findByKeyCombo(keyCombo: TKeyCombo): TCommand | undefined;
-// }
-
-type TCommandToKeyCombo = { readonly [P in TCommand['id']]: TKeyCombo };
+// Partial -> lookup can fail
+type TStringToKeyCombo = Partial<{ readonly [k: string]: TKeyCombo }>;
 
 // look up by CommandId rather than Command
 // because CommandId is the data that's being passed around the system
 class CommandToKeyComboResolver {
-  private readonly record: TCommandToKeyCombo;
+  private readonly record: TStringToKeyCombo;
 
-  constructor(record: TCommandToKeyCombo) {
-    this.record = record;
+  constructor(resolvedKeybindings: TStringToKeyCombo) {
+    this.record = resolvedKeybindings;
   }
 
-  findByCommandId(commandId: TCommand['id']): TKeyCombo | undefined {
+  findByCommandId(commandId: string): TKeyCombo | undefined {
     return this.record[commandId];
   }
 }
 
-class KeyComboToCommandResolver {
-  private readonly record: { [k: string]: TCommand['id'] };
+class KeyComboToCommandResolver<T extends TStringToKeyCombo, CommandId = keyof T> {
+  // Partial -> lookup can fail
+  // value type is `keyof T` because we know it's not just any string
+  // return type of string here is not very useful
+  private readonly record: Partial<{ [serializedKeyCombo: string]: CommandId }>;
+  // TODO: abstract get/set on record (probably use proxy) so formatKey is hidden
+  // and the key can just conceptually be the TKeyCombo object
   private static formatKey = formatLabel;
 
-  constructor(record: TCommandToKeyCombo) {
-    this.record = Object.entries(record).reduce(
-      (prev, [commandId, keyCombo]) => {
-        const key = KeyComboToCommandResolver.formatKey(keyCombo);
-        return Object.assign(prev, { [key]: commandId });
-      },
-      {}
-    );
+  constructor(resolvedKeybindings: T) {
+    this.record = Object.entries(resolvedKeybindings)
+      .filter(
+        (entry): entry is [string, TKeyCombo] => {
+          const [, keyCombo] = entry;
+          return keyCombo != null;
+        }
+      )
+      .map(([commandId, keyCombo]) => [
+        commandId,
+        KeyComboToCommandResolver.formatKey(keyCombo),
+      ])
+      .reduce(
+        (prev, [commandId, k]) => Object.assign(prev, { [k]: commandId }),
+        {}
+      );
   }
 
-  findByKeyCombo(keyCombo: TKeyCombo): TCommand['id'] | undefined {
+  // return `K` because we can guarantee the exact set of the output
+  // if the lookup fail we return undefined
+  findByKeyCombo(keyCombo: TKeyCombo): CommandId | undefined {
     const key = KeyComboToCommandResolver.formatKey(keyCombo);
     return this.record[key];
   }
@@ -69,31 +80,30 @@ interface TKeybinding {
 // Support two-way lookup:
 // - keyCombo -> commandId
 // - commandId -> keyCombo
-export class KeybindingsService {
+export class KeybindingsService<T extends TStringToKeyCombo> {
   private readonly keyComboResolver: CommandToKeyComboResolver;
-  private readonly commandResolver: KeyComboToCommandResolver;
+  private readonly commandResolver: KeyComboToCommandResolver<T>;
 
-  constructor(resolvedKeybindings: TCommandToKeyCombo) {
+  constructor(resolvedKeybindings: T) {
     this.keyComboResolver = new CommandToKeyComboResolver(resolvedKeybindings);
     this.commandResolver = new KeyComboToCommandResolver(resolvedKeybindings);
   }
 
-  findByCommandId(commandId: TCommand['id']): TKeybinding | undefined {
+  findByCommandId(commandId: string): TKeybinding | undefined {
     const keyCombo = this.keyComboResolver.findByCommandId(commandId);
-    if (keyCombo == null) {
-      return undefined;
-    }
-    return { label: formatLabel(keyCombo) };
+    return typeof keyCombo !== 'undefined'
+      ? { label: formatLabel(keyCombo) }
+      : undefined;
   }
 
-  // findAllByCommandId(commandId: TCommand['id']): Array<TKeybinding> | [];
+  // findAllByCommandId(commandId: keyof T): Array<TKeybinding> | [];
 
-  // findByKeyCombo(keyCombo: TKeyCombo): TCommand['id'] | undefined {
-  //   return this.commandResolver.findByKeyCombo(keyCombo);
-  // }
+  findByKeyCombo(keyCombo: TKeyCombo): keyof T | undefined {
+    return this.commandResolver.findByKeyCombo(keyCombo);
+  }
 }
 
-const TEMPORARY_RESOLVED_KEYBINDINGS: TCommandToKeyCombo = {
+const TEMPORARY_RESOLVED_KEYBINDINGS = {
   [QuickOpenAction.id]: {
     key: 'p',
     altKey: false,

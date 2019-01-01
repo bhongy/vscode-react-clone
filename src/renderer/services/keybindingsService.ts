@@ -17,6 +17,13 @@
 
 import { TKeyCombo, formatLabel } from '@code/keyCombo';
 import { TCommand } from '@code/commands/main';
+import {
+  fromPairs,
+  toPairs,
+  hasSecond,
+  mapSecond,
+  flip,
+} from '@code/utils/Pair';
 // TODO: create keybinding resolvers that takes default/user configs
 // so we don't hardcode these into the keybinding service
 import {
@@ -55,21 +62,12 @@ class KeyComboToCommandResolver {
   private static formatKey = formatLabel;
 
   constructor(resolvedKeybindings: TCommandIdToKeyCombo) {
-    this.record = Object.entries(resolvedKeybindings)
-      .filter(
-        (entry): entry is [string, TKeyCombo] => {
-          const [, keyCombo] = entry;
-          return keyCombo != null;
-        }
-      )
-      .map(([commandId, keyCombo]) => [
-        commandId,
-        KeyComboToCommandResolver.formatKey(keyCombo),
-      ])
-      .reduce(
-        (prev, [commandId, k]) => Object.assign(prev, { [k]: commandId }),
-        {}
-      );
+    this.record = fromPairs(
+      toPairs(resolvedKeybindings)
+        .filter(hasSecond)
+        .map(mapSecond(KeyComboToCommandResolver.formatKey))
+        .map(flip)
+    );
   }
 
   findByKeyCombo(keyCombo: TKeyCombo): TCommand['id'] | undefined {

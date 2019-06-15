@@ -1,5 +1,6 @@
 {
   "renderer": {
-    "dll": ["react", "react-dom"]
+    "dll": ["react", "react-dom"],
+    "webpackConfig": "electron-webpack.renderer.config.js"
   }
 }

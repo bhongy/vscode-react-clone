@@ -1,29 +1,35 @@
 {
-  "version": "3.2.2",
+  "version": "3.8.2",
   "include": ["src/**/*"],
   "compilerOptions": {
     "baseUrl": "./",
     "outDir": "dist",
     "paths": {
-      "@code/*": ["src/renderer/*"],
-      "*": ["node_modules/*"]
+      "@code/*": ["src/renderer/*"]
     },
     "jsx": "react",
-    "module": "commonjs",
+    "module": "esnext",
     "moduleResolution": "node",
     "target": "es2017",
-    // "noEmitOnError": true,
-
+    "noEmitOnError": true,
     "alwaysStrict": true,
     "forceConsistentCasingInFileNames": true,
+    // "removeComments": true,
+
+    "noFallthroughCasesInSwitch": true,
     "noImplicitAny": true,
     "noImplicitReturns": true,
     "noImplicitThis": true,
-    "removeComments": true,
-    // "strictBindCallApply": true,
-    // "strictFunctionTypes": true,
+    "noUnusedLocals": true,
+    "strictBindCallApply": true,
+    "strictFunctionTypes": true,
     "strictNullChecks": true,
     "strictPropertyInitialization": true,
-    "sourceMap": true
+
+    "inlineSources": true,
+    "sourceMap": true,
+
+    "allowSyntheticDefaultImports": true,
+    "newLine": "lf"
   }
 }

@@ -2,6 +2,10 @@ import { app, ipcMain, BrowserWindow } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
 
+// Remove this (use default) after upgrading to Electron 9
+// https://github.com/electron/electron/issues/18397
+app.allowRendererProcessReuse = true;
+
 const isDevelopment = process.env.NODE_ENV !== 'production';
 const windowsById: Map<number, Electron.BrowserWindow | null> = new Map();
 
@@ -14,7 +18,10 @@ const prodEntry = url.format({
 const entry = isDevelopment ? devEntry : prodEntry;
 
 function createWindow() {
-  const window = new BrowserWindow();
+  const window = new BrowserWindow({
+    webPreferences: { nodeIntegration: true },
+  });
+
   const { id } = window;
 
   windowsById.set(id, window);
